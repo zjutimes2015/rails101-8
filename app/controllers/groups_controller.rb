@@ -3,7 +3,7 @@ class GroupsController < ApplicationController
   before_action :authenticate_user! , only: [:new, :create, :edit, :update, :destory, :join , :quit]
 
   before_action :find_group_and_check_permission, only: [:edit, :update, :destroy]
-  
+
 
   def index
     @groups = Group.all
@@ -25,14 +25,14 @@ class GroupsController < ApplicationController
   def create
     @group = Group.new(group_params)
     @group.user = current_user
-
     if @group.save
+     current_user.join!(@group)
       redirect_to groups_path
     else
       render :new
     end
-  end
 
+  end
   def update
     if @group.update(group_params)
       redirect_to groups_path, notice: "Update Success"
